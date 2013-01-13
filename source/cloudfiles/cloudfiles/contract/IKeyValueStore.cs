@@ -12,6 +12,7 @@ namespace cloudfiles.contract
         int Increment(string key, int amount);
 
         string Get(string key);
+        bool TryGet(string key, out string value);
 
         void Remove(string key);
         void Clear();

@@ -130,5 +130,25 @@ namespace cloudfiles.filesystemcache.tests
 
             Assert.Throws<KeyValueStoreException>(() => sut.Get("non existent key"));
         }
+
+        [Test]
+        public void Try_getting_a_value_that_exists()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.ReplaceOrAdd("mykey", "hello");
+
+            var value = "";
+            Assert.IsTrue(sut.TryGet("mykey", out value));
+            Assert.AreEqual("hello", value);
+        }
+
+        [Test]
+        public void Try_getting_a_non_existent_value()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+
+            var value = "";
+            Assert.IsFalse(sut.TryGet("non existent key", out value));
+        }
     }
 }

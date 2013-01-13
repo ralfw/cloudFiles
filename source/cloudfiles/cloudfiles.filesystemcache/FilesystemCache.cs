@@ -48,7 +48,16 @@ namespace cloudfiles.filesystemcache
 
         public bool TryGet(string key, out string value)
         {
-            throw new NotImplementedException();
+            value = string.Empty;
+            try
+            {
+                value = Get(key);
+                return true;
+            }
+            catch(KeyValueStoreException)
+            {
+                return false;
+            }
         }
 
 
