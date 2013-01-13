@@ -11,45 +11,43 @@ namespace exploring.ironcache
     [TestFixture]
     public class Explorer
     {
-        [Test]
-        public void Add_and_load()
-        {
-            var cache = Connect();
+        private IronCache _cache;
 
-            cache.Add("test", "mykey", "hello");
-            Assert.AreEqual("hello", cache.Get("test", "mykey", "key not found"));
-        }
-
-
-        [Test]
-        public void Get_non_existent_value()
-        {
-            var cache = Connect();
-            Assert.AreEqual("no data yet", cache.Get("test", "nonexistentkey", "no data yet"));
-        }
-
-
-        [Test]
-        public void Replace_non_existing_value()
-        {
-            var cache = Connect();
-            Assert.Throws<HttpException>(() => cache.Replace("test", "nonexistentkey", "hello"));
-        }
-
-
-        [Test]
-        public void Inc_for_the_first_time()
-        {
-            var cache = Connect();
-            cache.Remove("test", "counter");
-            Assert.AreEqual(1, cache.Increment("test", "counter", 1));
-        }
-
-
-        private IronCache Connect()
+        public void Setup()
         {
             var cre = Credentials.LoadFrom(@"..\..\..\..\..\unversioned\ironcache credentials.txt");
-            return new io.iron.ironcache.IronCache(cre.ProjectId, cre.Token);
+            _cache = new io.iron.ironcache.IronCache(cre.ProjectId, cre.Token);
+        }
+
+
+        [Test]
+        public void Adding_key_multiple_times_leaves_original_value_in_place()
+        {
+            _cache.Add("test", "mykey", "hello");
+            _cache.Add("test", "mykey", "world");
+            Assert.AreEqual("world", _cache.Get<string>("test", "mykey"));
+        }
+
+
+        [Test]
+        public void Getting_non_existent_value_returns_default()
+        {
+            Assert.AreEqual("no data yet", _cache.Get("test", "nonexistentkey", "no data yet"));
+        }
+
+
+        [Test]
+        public void Replace_non_existing_value_causes_exception()
+        {
+            Assert.Throws<HttpException>(() => _cache.Replace("test", "nonexistentkey", "hello"));
+        }
+
+
+        [Test]
+        public void Inc_on_non_existent_key_causes_no_exception_and_returns_inc_amount()
+        {
+            _cache.Remove("test", "counter");
+            Assert.AreEqual(1, _cache.Increment("test", "counter", 1));
         }
     }
 }
