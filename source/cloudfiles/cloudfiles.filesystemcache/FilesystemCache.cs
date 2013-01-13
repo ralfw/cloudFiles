@@ -14,7 +14,7 @@ namespace cloudfiles.filesystemcache
         public FilesystemCache(string cacheDirectoryPath)
         {
             _cacheDirectoryPath = cacheDirectoryPath;
-            Directory.CreateDirectory(_cacheDirectoryPath);
+            Clear();
         }
 
 
@@ -50,7 +50,8 @@ namespace cloudfiles.filesystemcache
 
         public void Clear()
         {
-            Directory.Delete(_cacheDirectoryPath, true);   
+            if (Directory.Exists(_cacheDirectoryPath)) Directory.Delete(_cacheDirectoryPath, true);
+            Directory.CreateDirectory(_cacheDirectoryPath);
         }
 
 

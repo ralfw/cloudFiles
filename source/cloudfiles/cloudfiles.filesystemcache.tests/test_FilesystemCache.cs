@@ -97,5 +97,18 @@ namespace cloudfiles.filesystemcache.tests
 
             Assert.AreEqual("hello", File.ReadAllText(entry_filename));
         }
+
+
+        [Test]
+        public void Clear_removes_all_entries()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.Add("key1", "1");
+            sut.Add("key2", "2");
+
+            sut.Clear();
+
+            Assert.AreEqual(0, Directory.GetFiles(CACHE_PATH).Length);
+        }
     }
 }
