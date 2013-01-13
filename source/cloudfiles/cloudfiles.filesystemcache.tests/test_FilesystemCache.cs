@@ -110,5 +110,14 @@ namespace cloudfiles.filesystemcache.tests
 
             Assert.AreEqual(0, Directory.GetFiles(CACHE_PATH).Length);
         }
+
+        [Test]
+        public void Get_value_for_key()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.ReplaceOrAdd("mykey", "hello");
+
+            Assert.AreEqual("hello", sut.Get("mykey"));
+        }
     }
 }

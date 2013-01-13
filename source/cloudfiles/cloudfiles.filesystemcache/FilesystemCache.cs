@@ -40,7 +40,7 @@ namespace cloudfiles.filesystemcache
 
         public string Get(string key)
         {
-            throw new NotImplementedException();
+            return File.ReadAllText(Build_entry_filename(key));
         }
 
         public void Remove(string key)
@@ -55,11 +55,7 @@ namespace cloudfiles.filesystemcache
         }
 
 
-        public void Dispose()
-        {
-            
-        }
-
+        public void Dispose() {}
 
 
         private string Build_entry_filename(string key)
