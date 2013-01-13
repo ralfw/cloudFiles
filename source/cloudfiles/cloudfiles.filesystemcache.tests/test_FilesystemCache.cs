@@ -28,9 +28,8 @@ namespace cloudfiles.filesystemcache.tests
         public void Adding_key_creates_file_and_stores_value()
         {
             const string entry_filename = CACHE_PATH + @"\mykey.txt";
-
-            var sut = new FilesystemCache(CACHE_PATH);
             File.Delete(entry_filename);
+            var sut = new FilesystemCache(CACHE_PATH);
 
             sut.Add("mykey", "hello");
 
@@ -42,14 +41,61 @@ namespace cloudfiles.filesystemcache.tests
         public void Adding_existing_key_does_not_overwrite_value()
         {
             const string entry_filename = CACHE_PATH + @"\mykey.txt";
-
-            var sut = new FilesystemCache(CACHE_PATH);
             File.Delete(entry_filename);
+            var sut = new FilesystemCache(CACHE_PATH);
 
             sut.Add("mykey", "hello");
             sut.Add("mykey", "world");
 
             Assert.AreEqual("hello", File.ReadAllText(entry_filename));   
+        }
+
+
+        [Test]
+        public void Remove_a_key()
+        {
+            const string entry_filename = CACHE_PATH + @"\mykey.txt";
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.Add("mykey", "to be deleted");
+
+            sut.Remove("mykey");
+
+            Assert.IsFalse(File.Exists(entry_filename));
+        }
+
+
+        [Test]
+        public void Remoing_a_non_existing_key_has_no_effect()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+
+            sut.Remove("non existent key");
+        }
+
+
+        [Test]
+        public void Replace_an_existing_value()
+        {
+            const string entry_filename = CACHE_PATH + @"\mykey.txt";
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.Add("mykey", "will be overwritten");
+
+            sut.ReplaceOrAdd("mykey", "hello");
+
+            Assert.AreEqual("hello", File.ReadAllText(entry_filename));
+        }
+
+
+        [Test]
+        public void Replace_non_existent_key_creates_it()
+        {
+            const string entry_filename = CACHE_PATH + @"\mykey.txt";
+            File.Delete(entry_filename);
+            var sut = new FilesystemCache(CACHE_PATH);
+
+            sut.ReplaceOrAdd("mykey", "hello");
+
+            Assert.AreEqual("hello", File.ReadAllText(entry_filename));
         }
     }
 }

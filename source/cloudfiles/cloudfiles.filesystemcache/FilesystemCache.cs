@@ -29,8 +29,9 @@ namespace cloudfiles.filesystemcache
 
         public void ReplaceOrAdd(string key, string value)
         {
-            throw new NotImplementedException();
+            File.WriteAllText(Build_entry_filename(key), value);
         }
+
 
         public int Increment(string key, int amount)
         {
@@ -44,7 +45,7 @@ namespace cloudfiles.filesystemcache
 
         public void Remove(string key)
         {
-            throw new NotImplementedException();
+            File.Delete(Build_entry_filename(key));
         }
 
         public void Clear()
