@@ -152,11 +152,20 @@ namespace cloudfiles.filesystemcache.tests
         }
 
         [Test]
-        public void Increment_an_non_existent_value()
+        public void Increment_an_non_existent_value_creates_it_and_returns_amount()
         {
             var sut = new FilesystemCache(CACHE_PATH);
             sut.Remove("mycounter");
             Assert.AreEqual(1, sut.Increment("mycounter", 1));
+        }
+
+        [Test]
+        public void Increment_existing_value_returns_new_value()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.ReplaceOrAdd("mycounter", "1");
+
+            Assert.AreEqual(100, sut.Increment("mycounter", 99));
         }
     }
 }

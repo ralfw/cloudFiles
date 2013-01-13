@@ -36,8 +36,14 @@ namespace cloudfiles.filesystemcache
         public int Increment(string key, int amount)
         {
             var entry_filename = Build_entry_filename(key);
-            File.WriteAllText(entry_filename, amount.ToString());
-            return amount;
+            var incremented_value = amount;
+
+            var value = "";
+            if (TryGet(key, out value)) incremented_value = int.Parse(value) + amount;
+
+            File.WriteAllText(entry_filename, incremented_value.ToString());
+
+            return incremented_value;
         }
 
         public string Get(string key)
