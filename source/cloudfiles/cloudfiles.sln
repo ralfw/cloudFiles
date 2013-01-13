@@ -9,6 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filesystem Cache", "Filesys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudfiles.filesystemcache.tests", "cloudfiles.filesystemcache.tests\cloudfiles.filesystemcache.tests.csproj", "{8E767F72-37D3-490F-A057-9D206BFE539D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iron.io Cache", "iron.io Cache", "{038365A5-9AA5-4DC8-B6E5-1F328F36CE22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudfiles.ironiocache", "cloudfiles.ironiocache\cloudfiles.ironiocache.csproj", "{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudfiles.ironiocache.tests", "cloudfiles.ironiocache.tests\cloudfiles.ironiocache.tests.csproj", "{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,14 @@ Global
 		{8E767F72-37D3-490F-A057-9D206BFE539D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E767F72-37D3-490F-A057-9D206BFE539D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E767F72-37D3-490F-A057-9D206BFE539D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,5 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0B668A95-BA2D-414D-811A-AAB710CFA0F8} = {082C1847-8C6B-42F0-BEC9-DC11AD3343AF}
 		{8E767F72-37D3-490F-A057-9D206BFE539D} = {082C1847-8C6B-42F0-BEC9-DC11AD3343AF}
+		{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B} = {038365A5-9AA5-4DC8-B6E5-1F328F36CE22}
+		{6CDCBC8F-41CA-4E29-A917-C8342C8A3B3C} = {038365A5-9AA5-4DC8-B6E5-1F328F36CE22}
 	EndGlobalSection
 EndGlobal

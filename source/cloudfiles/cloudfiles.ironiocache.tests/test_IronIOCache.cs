@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cloudfiles
+namespace cloudfiles.ironiocache.tests
 {
-    public class Class1
+    public class test_IronIOCache
     {
     }
 }
