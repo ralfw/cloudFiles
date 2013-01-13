@@ -40,8 +40,17 @@ namespace cloudfiles.filesystemcache
 
         public string Get(string key)
         {
-            return File.ReadAllText(Build_entry_filename(key));
+            var entry_filename = Build_entry_filename(key);
+            if (File.Exists(entry_filename))
+                return File.ReadAllText(entry_filename);
+            throw new KeyValueStoreException(string.Format("No entry found in cache for key: {0}", key));
         }
+
+        public bool TryGet(string key, out string value)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void Remove(string key)
         {

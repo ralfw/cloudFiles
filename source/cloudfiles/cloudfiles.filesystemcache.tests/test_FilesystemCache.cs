@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using cloudfiles.contract;
 
 namespace cloudfiles.filesystemcache.tests
 {
@@ -111,6 +112,7 @@ namespace cloudfiles.filesystemcache.tests
             Assert.AreEqual(0, Directory.GetFiles(CACHE_PATH).Length);
         }
 
+
         [Test]
         public void Get_value_for_key()
         {
@@ -118,6 +120,15 @@ namespace cloudfiles.filesystemcache.tests
             sut.ReplaceOrAdd("mykey", "hello");
 
             Assert.AreEqual("hello", sut.Get("mykey"));
+        }
+
+
+        [Test]
+        public void Getting_non_existent_value_causes_exception()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+
+            Assert.Throws<KeyValueStoreException>(() => sut.Get("non existent key"));
         }
     }
 }
