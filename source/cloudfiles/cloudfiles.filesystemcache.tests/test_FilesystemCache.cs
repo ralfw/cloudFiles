@@ -150,5 +150,13 @@ namespace cloudfiles.filesystemcache.tests
             var value = "";
             Assert.IsFalse(sut.TryGet("non existent key", out value));
         }
+
+        [Test]
+        public void Increment_an_non_existent_value()
+        {
+            var sut = new FilesystemCache(CACHE_PATH);
+            sut.Remove("mycounter");
+            Assert.AreEqual(1, sut.Increment("mycounter", 1));
+        }
     }
 }

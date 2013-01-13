@@ -35,7 +35,9 @@ namespace cloudfiles.filesystemcache
 
         public int Increment(string key, int amount)
         {
-            throw new NotImplementedException();
+            var entry_filename = Build_entry_filename(key);
+            File.WriteAllText(entry_filename, amount.ToString());
+            return amount;
         }
 
         public string Get(string key)
@@ -59,7 +61,6 @@ namespace cloudfiles.filesystemcache
                 return false;
             }
         }
-
 
         public void Remove(string key)
         {
