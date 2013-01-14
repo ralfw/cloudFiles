@@ -8,14 +8,6 @@ using cloudfiles.contract;
 
 namespace cloudfiles
 {
-    internal class BlockUploadSummary
-    {
-        public Guid BlockGroupId;
-        public int TotalNumberOfBytes;
-        public int BlockSize;
-    }
-
-
     internal class BlockStore
     {
         private const int DEFAULT_BLOCK_SIZE = 4000;
@@ -40,6 +32,7 @@ namespace cloudfiles
                 Store_block(summary, block));
         }
 
+
         internal void Stream_blocks(Stream source, Action<Tuple<byte[], int>> on_block)
         {
             var buffer = new byte[_blockSize];
@@ -48,9 +41,17 @@ namespace cloudfiles
             while ((nBytesRead = source.Read(buffer, 0, buffer.Length)) == buffer.Length)
                 on_block(Create_block(buffer, nBytesRead, blockIndex++));
             if (nBytesRead > 0)
-                on_block(Create_block(buffer, nBytesRead, blockIndex));
-            on_block(new Tuple<byte[], int>(null, 0));
+                on_block(Create_block(buffer, nBytesRead, blockIndex++));
+            on_block(new Tuple<byte[], int>(null, blockIndex));
         }
+
+        internal void Store_block(BlockUploadSummary summary, Tuple<byte[], int> block)
+        {
+            var blockKey = Build_block_key(summary.BlockGroupId, block.Item2);
+            Upload_block(blockKey, block.Item1);
+            Summarize_blocks(summary, block);
+        }
+
 
         private Tuple<byte[],int> Create_block(byte[] buffer, int nBytesRead, int blockIndex)
         {
@@ -60,19 +61,10 @@ namespace cloudfiles
         }
 
 
-        internal void Store_block(BlockUploadSummary summary, Tuple<byte[], int> block)
-        {
-            var blockKey = Build_block_key(summary.BlockGroupId, block.Item2);
-            Upload_block(blockKey, block.Item1);
-            Summarize_blocks(summary, block.Item1);
-        }
-
-
         private string Build_block_key(Guid blockGroupId, int blockIndex)
         {
             return string.Format("{0}-{1}", blockIndex, blockGroupId);
         }
-
 
         internal void Upload_block(string blockKey, byte[] blockContent)
         {
@@ -83,13 +75,15 @@ namespace cloudfiles
             _cache.Add(blockKey, signed_content);
         }
 
-
-        internal void Summarize_blocks(BlockUploadSummary summary, byte[] blockContent)
+        internal void Summarize_blocks(BlockUploadSummary summary, Tuple<byte[],int> block)
         {
-            if (blockContent != null)
-                summary.TotalNumberOfBytes += blockContent.Length;
+            if (block.Item1 != null)
+                summary.TotalNumberOfBytes += block.Item1.Length;
             else
+            {
+                summary.NumberOfBlocks = block.Item2;
                 On_blocks_stored(summary);
+            }
         }
 
 

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockStore.cs" />
+    <Compile Include="BlockUploadSummary.cs" />
     <Compile Include="contract\FileStoreException.cs" />
     <Compile Include="contract\IFileMetadata.cs" />
     <Compile Include="contract\IFileStore.cs" />

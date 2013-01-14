@@ -25,7 +25,7 @@ namespace cloudfiles.tests
 
 
         [Test]
-        public void Store_a_single_block()
+        public void Upload_a_single_block()
         {
             var content = new byte[]{1, 2, 3};
 
@@ -41,14 +41,15 @@ namespace cloudfiles.tests
             BlockUploadSummary result = null;
             _sut.On_blocks_stored += _ => result = _;
 
-            _sut.Summarize_blocks(summary, new byte[] { 1, 2, 3 });
-            _sut.Summarize_blocks(summary, new byte[] { 4, 5 });
-            _sut.Summarize_blocks(summary, null);
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0));
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 4, 5 }, 1));
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(null, 2));
 
             Assert.AreSame(summary, result);
             Assert.AreEqual(summary.BlockGroupId, result.BlockGroupId);
             Assert.AreEqual(5, result.TotalNumberOfBytes);
             Assert.AreEqual(3, result.BlockSize);
+            Assert.AreEqual(2, result.NumberOfBlocks);
         }
 
 
@@ -56,7 +57,7 @@ namespace cloudfiles.tests
         public void Store_block_integration()
         {
             var summary = new BlockUploadSummary { BlockGroupId = Guid.NewGuid(), BlockSize = 3 };
-            dynamic result = null;
+            BlockUploadSummary result = null;
             _sut.On_blocks_stored += _ => result = _;
 
             _sut.Store_block(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0));
@@ -68,6 +69,7 @@ namespace cloudfiles.tests
             Assert.AreEqual(summary.BlockGroupId, result.BlockGroupId);
             Assert.AreEqual(8, result.TotalNumberOfBytes);
             Assert.AreEqual(3, result.BlockSize);
+            Assert.AreEqual(3, result.NumberOfBlocks);
         }
 
 
@@ -103,6 +105,7 @@ namespace cloudfiles.tests
             Assert.AreNotEqual(Guid.Empty, result.BlockGroupId);
             Assert.AreEqual(10, result.TotalNumberOfBytes);
             Assert.AreEqual(3, result.BlockSize);
+            Assert.AreEqual(4, result.NumberOfBlocks);
         }
     }
 }
