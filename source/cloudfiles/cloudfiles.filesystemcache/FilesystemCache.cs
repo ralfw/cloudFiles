@@ -75,8 +75,9 @@ namespace cloudfiles.filesystemcache
 
         public void Clear()
         {
-            if (Directory.Exists(_cacheDirectoryPath)) Directory.Delete(_cacheDirectoryPath, true);
             Directory.CreateDirectory(_cacheDirectoryPath);
+            Directory.GetFiles(_cacheDirectoryPath).ToList()
+                     .ForEach(File.Delete);
         }
 
 

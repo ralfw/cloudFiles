@@ -65,7 +65,7 @@ namespace cloudfiles.ironiocache
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            _cache.Clear(_cacheName);
         }
 
         public void Dispose() {}
