@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="test_BlockStore.cs" />
+    <Compile Include="test_BlockStore_storing.cs" />
+    <Compile Include="test_BlockStore_upload_operations.cs" />
     <Compile Include="test_FileStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

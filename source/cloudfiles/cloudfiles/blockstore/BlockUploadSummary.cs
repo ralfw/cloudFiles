@@ -1,6 +1,6 @@
 using System;
 
-namespace cloudfiles
+namespace cloudfiles.blockstore
 {
     internal class BlockUploadSummary
     {

@@ -40,8 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockStore.cs" />
-    <Compile Include="BlockUploadSummary.cs" />
+    <Compile Include="blockstore\BlockStore.cs" />
+    <Compile Include="blockstore\BlockStore_upload_operations.cs" />
+    <Compile Include="blockstore\BlockUploadSummary.cs" />
     <Compile Include="contract\FileStoreException.cs" />
     <Compile Include="contract\IFileMetadata.cs" />
     <Compile Include="contract\IFileStore.cs" />
