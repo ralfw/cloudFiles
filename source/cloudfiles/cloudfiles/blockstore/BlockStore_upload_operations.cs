@@ -51,21 +51,18 @@ namespace cloudfiles.blockstore
             _cache.Add(blockKey, serialized_content);
         }
 
-        public void Summarize_blocks(BlockUploadSummary summary, Tuple<byte[], int> block)
+        public void Summarize_blocks(BlockUploadSummary summary, Tuple<byte[], int> block, Action<BlockUploadSummary> on_end_of_block_stream)
         {
             if (block.Item1 != null)
                 summary.TotalNumberOfBytes += block.Item1.Length;
             else
             {
                 summary.NumberOfBlocks = block.Item2;
-                On_blocks_stored(summary);
+                on_end_of_block_stream(summary);
             }
         }
 
 
         public int BlockSize { get { return _blockSize; } }
-
-
-        public event Action<BlockUploadSummary> On_blocks_stored;
     }
 }

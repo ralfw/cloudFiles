@@ -38,11 +38,10 @@ namespace cloudfiles.tests
         {
             var summary = new BlockUploadSummary { BlockGroupId = Guid.NewGuid(), BlockSize = 3 };
             BlockUploadSummary result = null;
-            _sut.On_blocks_stored += _ => result = _;
 
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0));
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 4, 5 }, 1));
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(null, 2));
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0), null);
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 4, 5 }, 1), null);
+            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(null, 2), _ => result = _);
 
             Assert.AreSame(summary, result);
             Assert.AreEqual(summary.BlockGroupId, result.BlockGroupId);

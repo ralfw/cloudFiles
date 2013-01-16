@@ -27,20 +27,14 @@ namespace cloudfiles.tests
         [Test]
         public void Store_block_integration()
         {
-            var summary = new BlockUploadSummary { BlockGroupId = Guid.NewGuid(), BlockSize = 3 };
-            BlockUploadSummary result = null;
-            _sut.On_blocks_stored += _ => result = _;
+            Guid id = Guid.NewGuid();
+            Tuple<byte[],int> result = null;
 
-            _sut.Store_block(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0));
-            _sut.Store_block(summary, new Tuple<byte[], int>(new byte[] { 4, 5, 6 }, 1));
-            _sut.Store_block(summary, new Tuple<byte[], int>(new byte[] { 7, 8 }, 2));
-            _sut.Store_block(summary, new Tuple<byte[], int>(null, 3));
+            var block = new Tuple<byte[], int>(new byte[] {1, 2, 3}, 0);
+            _sut.Store_block(id, block, _ => result = _);
 
-            Assert.AreEqual(3, Directory.GetFiles(CACHE_NAME).Length);
-            Assert.AreEqual(summary.BlockGroupId, result.BlockGroupId);
-            Assert.AreEqual(8, result.TotalNumberOfBytes);
-            Assert.AreEqual(3, result.BlockSize);
-            Assert.AreEqual(3, result.NumberOfBlocks);
+            Assert.AreEqual(1, Directory.GetFiles(CACHE_NAME).Length);
+            Assert.AreEqual(block, result);
         }
 
         [Test]
