@@ -67,5 +67,15 @@ namespace cloudfiles.tests
             Assert.AreEqual(2, result[2].Item2);
             Assert.IsNull(result[3].Item1);
         }
+
+        [Test]
+        public void Store_head()
+        {
+            var id = Guid.NewGuid();
+
+            _sut.Store_head(id, 42);
+
+            Assert.AreEqual("42", File.ReadAllText(CACHE_NAME + @"\" + id + ".txt"));
+        }
     }
 }

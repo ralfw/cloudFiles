@@ -51,6 +51,7 @@ namespace cloudfiles.blockstore
             _cache.Add(blockKey, serialized_content);
         }
 
+
         public void Summarize_blocks(BlockUploadSummary summary, Tuple<byte[], int> block, Action<BlockUploadSummary> on_end_of_block_stream)
         {
             if (block.Item1 != null)
@@ -63,6 +64,13 @@ namespace cloudfiles.blockstore
         }
 
 
+        public void Store_head(Guid blockGroupId, int numberOfBlocks)
+        {
+            _cache.Add(blockGroupId.ToString(), numberOfBlocks.ToString());
+        }
+
+
         public int BlockSize { get { return _blockSize; } }
+
     }
 }

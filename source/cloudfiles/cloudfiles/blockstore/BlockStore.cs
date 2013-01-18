@@ -24,8 +24,11 @@ namespace cloudfiles.blockstore
             var summary = new BlockUploadSummary {BlockGroupId = blockGroupId, BlockSize = _upload.BlockSize};
             _upload.Stream_blocks(source, block0 => 
                     Store_block(blockGroupId, block0, block1 => 
-                        _upload.Summarize_blocks(summary, block1, block2 =>
-                            On_blocks_stored(block2))));
+                        _upload.Summarize_blocks(summary, block1, summary1 =>
+                        {
+                            _upload.Store_head(summary1.BlockGroupId, summary1.NumberOfBlocks);
+                            On_blocks_stored(summary1);
+                        })));
         }
 
 
