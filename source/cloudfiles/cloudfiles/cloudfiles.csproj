@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="blockstore\BlockStore.cs" />
+    <Compile Include="blockstore\BlockStore_download_operations.cs" />
+    <Compile Include="blockstore\BlockStore_extensions.cs" />
     <Compile Include="blockstore\BlockStore_upload_operations.cs" />
     <Compile Include="blockstore\BlockUploadSummary.cs" />
     <Compile Include="contract\FileStoreException.cs" />

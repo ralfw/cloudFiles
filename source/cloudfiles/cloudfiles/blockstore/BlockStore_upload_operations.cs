@@ -38,11 +38,6 @@ namespace cloudfiles.blockstore
         }
 
 
-        public string Build_block_key(Guid blockGroupId, int blockIndex)
-        {
-            return string.Format("{0}-{1}", blockIndex, blockGroupId);
-        }
-
         public void Upload_block(string blockKey, byte[] blockContent)
         {
             if (blockContent == null) return;
