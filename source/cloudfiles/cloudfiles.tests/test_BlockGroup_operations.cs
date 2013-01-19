@@ -9,17 +9,17 @@ using cloudfiles.filesystemcache;
 namespace cloudfiles.tests
 {
     [TestFixture]
-    public class test_BlockStore_upload_operations
+    public class test_BlockGroup_operations
     {
         private const string CACHE_NAME = "testcache";
-        private BlockStore_upload_operations _sut;
+        private BlockGroup_operations _sut;
 
         [SetUp]
         public void Setup()
         {
             var cache = new FilesystemCache(CACHE_NAME);
             cache.Clear();
-            _sut = new BlockStore_upload_operations(cache, 3);
+            _sut = new BlockGroup_operations(cache, 3);
         }
 
 
@@ -39,9 +39,9 @@ namespace cloudfiles.tests
             var summary = new BlockUploadSummary { BlockGroupId = Guid.NewGuid(), BlockSize = 3 };
             BlockUploadSummary result = null;
 
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0), null);
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(new byte[] { 4, 5 }, 1), null);
-            _sut.Summarize_blocks(summary, new Tuple<byte[], int>(null, 2), _ => result = _);
+            summary.Aggregate(new Tuple<byte[], int>(new byte[] { 1, 2, 3 }, 0), null);
+            summary.Aggregate(new Tuple<byte[], int>(new byte[] { 4, 5 }, 1), null);
+            summary.Aggregate(new Tuple<byte[], int>(null, 2), _ => result = _);
 
             Assert.AreSame(summary, result);
             Assert.AreEqual(summary.BlockGroupId, result.BlockGroupId);
@@ -66,16 +66,6 @@ namespace cloudfiles.tests
             Assert.That(result[2].Item1, Is.EqualTo(new byte[] { 55, 56 }));
             Assert.AreEqual(2, result[2].Item2);
             Assert.IsNull(result[3].Item1);
-        }
-
-        [Test]
-        public void Store_head()
-        {
-            var id = Guid.NewGuid();
-
-            _sut.Store_head(id, 42);
-
-            Assert.AreEqual("42", File.ReadAllText(CACHE_NAME + @"\" + id + ".txt"));
         }
     }
 }

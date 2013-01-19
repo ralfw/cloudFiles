@@ -43,9 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="test_BlockStore_loading.cs" />
-    <Compile Include="test_BlockStore_storing.cs" />
-    <Compile Include="test_BlockStore_upload_operations.cs" />
+    <Compile Include="test_BlockStore.cs" />
+    <Compile Include="test_BlockGroup_operations.cs" />
     <Compile Include="test_FileStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,10 +53,25 @@
       <Project>{0B668A95-BA2D-414D-811A-AAB710CFA0F8}</Project>
       <Name>cloudfiles.filesystemcache</Name>
     </ProjectReference>
+    <ProjectReference Include="..\cloudfiles.ironiocache\cloudfiles.ironiocache.csproj">
+      <Project>{ABC30A80-03E0-46DD-AE17-7B9280BD0A1B}</Project>
+      <Name>cloudfiles.ironiocache</Name>
+    </ProjectReference>
     <ProjectReference Include="..\cloudfiles\cloudfiles.csproj">
       <Project>{764FE2A4-8895-4768-9778-95F4CE525B8E}</Project>
       <Name>cloudfiles</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="files\doc.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="files\music.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

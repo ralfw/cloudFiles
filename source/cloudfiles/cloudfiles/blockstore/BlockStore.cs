@@ -6,38 +6,39 @@ namespace cloudfiles.blockstore
 {
     internal class BlockStore
     {
-        private const int DEFAULT_BLOCK_SIZE = 40*1024;
+        private const int DEFAULT_BLOCK_SIZE = 100*1024;
 
-        private readonly BlockStore_upload_operations _upload;
-        private readonly BlockStore_download_operations _download;
+        private readonly BlockGroup_operations _groupOps;
+        private readonly BlockGroupHead_operations _headOps;
+        private readonly int _blockSize;
 
 
         public BlockStore(IKeyValueStore cache) : this(cache, DEFAULT_BLOCK_SIZE) {}
         public BlockStore(IKeyValueStore cache, int blockSize)
         {
-            _upload = new BlockStore_upload_operations(cache, blockSize);
-            _download = new BlockStore_download_operations(cache);
+            _groupOps = new BlockGroup_operations(cache, blockSize);
+            _headOps = new BlockGroupHead_operations(cache);
+            _blockSize = blockSize;
         }
 
 
         public void Store_blocks(Stream source)
         {
             var blockGroupId = Guid.NewGuid();
-            var summary = new BlockUploadSummary {BlockGroupId = blockGroupId, BlockSize = _upload.BlockSize};
-            _upload.Stream_blocks(source, block0 => 
+            var summary = new BlockUploadSummary {BlockGroupId = blockGroupId, BlockSize =  _blockSize};
+            _groupOps.Stream_blocks(source, block0 => 
                     Store_block(blockGroupId, block0, block1 => 
-                        _upload.Summarize_blocks(summary, block1, summary1 =>
+                        summary.Aggregate(block1, _ =>
                         {
-                            _upload.Store_head(summary1.BlockGroupId, summary1.NumberOfBlocks);
-                            On_blocks_stored(summary1);
+                            _headOps.Write_number_of_blocks(_.BlockGroupId, _.NumberOfBlocks);
+                            On_blocks_stored(_);
                         })));
         }
-
 
         internal void Store_block(Guid blockGroupId, Tuple<byte[], int> block, Action<Tuple<byte[], int>> on_block)
         {
             var blockKey = blockGroupId.Build_block_key_for_index(block.Item2);
-            _upload.Upload_block(blockKey, block.Item1);
+            _groupOps.Upload_block(blockKey, block.Item1);
             on_block(block);
         }
 
@@ -45,11 +46,11 @@ namespace cloudfiles.blockstore
 
         public void Load_blocks(Guid blockGroupId, Stream destination)
         {
-            var numberOfBlocks = _download.Get_number_of_blocks(blockGroupId);
-            _download.Stream_block_keys(blockGroupId, numberOfBlocks, blockKey =>
+            var numberOfBlocks = _headOps.Read_number_of_blocks(blockGroupId);
+            _groupOps.Stream_block_keys(blockGroupId, numberOfBlocks, blockKey =>
             {
-                var blockContent = _download.Download_block(blockKey);
-                _download.Write_content(blockContent, destination);
+                var blockContent = _groupOps.Download_block(blockKey);
+                _groupOps.Write_content(blockContent, destination);
             });
         }
 
